@@ -1,7 +1,9 @@
+import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
 import './App.css';
 import TodoForm from "./components/TodoForm";
 import TodoList from "./components/TodoList";
+
 
 const LOCAL_STORAGE_KEY = 'react-todo-list-todos';
 
@@ -15,7 +17,7 @@ function App() {
    }
  }, []);
 
- useEffect(() => {
+ useEffect(() => { 
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
  }, [todos]);
 
@@ -23,13 +25,37 @@ function App() {
     setTodos([todo, ...todos]);
  }
 
+ function toggleComplete(id){
+   setTodos(
+     todos.map(todo => {
+       if(todo.id === id){
+          return {
+            ...todo,
+            completed: !todo.completed
+          };
+       }
+       return todo;
+     })
+   );
+ }
+
+ function removeTodo(id){
+    setTodos(todos.filter(todo => todo.id  !== id));
+ }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <p>React Todo</p>
+       
+        <Typography style={{ padding: 16}} variant="h1">
+          React Todo
+        </Typography>
         <TodoForm addTodo={addTodo} />
-        <TodoList todos={todos} />
-      </header>
+        <TodoList 
+          todos={todos} 
+          toggleComplete={toggleComplete} 
+          removeTodo = {removeTodo}
+        />
+      
     </div>
   );
 }
